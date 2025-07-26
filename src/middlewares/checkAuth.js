@@ -1,0 +1,18 @@
+import { throwError } from '../utils/throwError.js'
+
+export const checkAuth = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return throwError('Unauthorized', 401)
+    }
+
+    const token = authHeader.split(' ')[1]
+    const decoded = verifyToken(token)
+
+    req.user = decoded
+    next()
+  } catch (err) {
+    return throwError('Invalid or expired token', 401)
+  }
+}
