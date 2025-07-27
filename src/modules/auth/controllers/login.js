@@ -5,7 +5,7 @@ import { sendOtpByEmail } from '../../../utils/sendMailOtp.js'
 import { throwError } from '../../../utils/throwError.js'
 
 const schema = yup.object({
-  email: yup.string().email('Invalid email format').required('Email is required'),
+  email: yup.string().email('Email không hợp lệ').required('Email không được bỏ trống'),
   role: yup.string().optional(),
 })
 
@@ -21,7 +21,7 @@ export const login = async (req, res, next) => {
 
     if (!user) {
       if (isPrivileged) {
-        throwError('User not found', 404)
+        throwError('Không tìm thấy người dùng', 404)
       }
 
       user = await User.create({
@@ -32,7 +32,7 @@ export const login = async (req, res, next) => {
 
     const otp = generateOTP()
     const otpHash = await hashOTP(otp)
-    const otpExpireAt = new Date(Date.now() + 5 * 60 * 1000) // 5 minutes
+    const otpExpireAt = new Date(Date.now() + 5 * 60 * 1000)
 
     user.otpHash = otpHash
     user.otpExpireAt = otpExpireAt
@@ -42,7 +42,7 @@ export const login = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: 'OTP has been sent',
+      message: 'Mã OTP đã được gửi tới email của bạn',
       data: {
         email,
         ...(process.env.NODE_ENV !== 'production' && { otp }),
@@ -51,7 +51,7 @@ export const login = async (req, res, next) => {
   } catch (error) {
     if (error.name === 'ValidationError') {
       return res.status(400).json({
-        message: 'Validation failed',
+        message: 'Dữ liệu không hợp lệ',
         errors: error.errors,
       })
     }

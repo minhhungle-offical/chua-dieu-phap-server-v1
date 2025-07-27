@@ -1,28 +1,22 @@
-const whitelist = ["http://localhost:3000"];
+const whitelist = ['http://localhost:3000', 'http://localhost:5173']
 
 export const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.includes(origin)) {
-      callback(null, true);
+      callback(null, true)
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error('Not allowed by CORS'))
     }
   },
 
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With",
-    "Accept",
-    "Origin",
-  ],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
 
-  exposedHeaders: ["Content-Length", "X-Kuma-Revision", "X-Total-Count"],
+  exposedHeaders: ['Content-Length', 'X-Kuma-Revision', 'X-Total-Count'],
 
-  credentials: true,
-  maxAge: 86400,
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-};
+  // credentials: true,
+  // maxAge: 86400,
+  // preflightContinue: false,
+  // optionsSuccessStatus: 204,
+}
