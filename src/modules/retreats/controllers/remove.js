@@ -1,6 +1,6 @@
+import { deleteImage } from '../../../middlewares/upload.js'
 import Retreat from '../../../models/Retreat.js'
 import { throwError } from '../../../utils/throwError.js'
-import { deleteImage } from '../../../utils/cloudinary.js'
 
 export const remove = async (req, res, next) => {
   try {

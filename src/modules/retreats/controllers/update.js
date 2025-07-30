@@ -1,8 +1,9 @@
 import * as yup from 'yup'
 import { generateUniqueSlug } from '../../../helpers/slugHelper.js'
 import Retreat from '../../../models/Retreat.js'
-import { deleteImage } from '../../../utils/cloudinary.js'
+
 import { throwError } from '../../../utils/throwError.js'
+import { deleteImage } from '../../../middlewares/upload.js'
 
 const schema = yup.object({
   name: yup.string(),
@@ -35,12 +36,12 @@ export const update = async (req, res, next) => {
       body.slug = await generateUniqueSlug(body.name, Retreat, retreat._id)
     }
 
-    if (req.imageUrl && retreat.publicId) {
-      await deleteImage(retreat.publicId)
-    }
+    if (req.url && req.publicId) {
+      if (retreat.publicId) {
+        await deleteImage(retreat.publicId)
+      }
 
-    if (req.imageUrl) {
-      body.imageUrl = req.imageUrl
+      body.imageUrl = req.url
       body.publicId = req.publicId
     }
 

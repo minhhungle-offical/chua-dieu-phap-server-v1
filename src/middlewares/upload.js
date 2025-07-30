@@ -25,7 +25,7 @@ export const deleteImage = async (publicId) => {
 
 export function createImageUploader({
   folder,
-  fieldName = 'thumbnail',
+  fieldName = 'image',
   width = 800,
   targetSizeKB = 200,
   square = false,
@@ -34,6 +34,8 @@ export function createImageUploader({
     upload.single(fieldName),
     async (req, res, next) => {
       try {
+        console.log('file', req.file)
+        console.log('body', req.body)
         if (!req.file) return next()
 
         const resizeOptions = square
@@ -56,6 +58,7 @@ export function createImageUploader({
                 { folder: `chua-dieu-phap/${folder}`, format: 'webp' },
                 (err, result) => {
                   if (err) return reject(err)
+
                   resolve({
                     url: result.secure_url,
                     publicId: result.public_id,
@@ -65,7 +68,10 @@ export function createImageUploader({
               .end(buffer)
           })
 
-        req.uploadedImage = await uploadToCloudinary()
+        const { url, publicId } = await uploadToCloudinary()
+
+        req.url = url
+        req.publicId = publicId
         next()
       } catch (err) {
         console.error('🚨 Image upload failed:', err)

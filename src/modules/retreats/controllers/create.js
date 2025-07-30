@@ -4,15 +4,31 @@ import Retreat from '../../../models/Retreat.js'
 import { throwError } from '../../../utils/throwError.js'
 
 const schema = yup.object({
-  name: yup.string().required(),
+  name: yup.string().required('Name là trường bắt buộc'),
   description: yup.string().default(''),
   type: yup
     .string()
     .oneOf(['bqt', 'phat-that', 'thien', 'summer', 'gieo-duyen', 'hoc-phap', 'khac'])
     .default('khac'),
   status: yup.string().oneOf(['draft', 'published', 'archived']).default('draft'),
+  startTime: yup
+    .string()
+    .required('Giờ bắt đầu là bắt buộc')
+    .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Giờ bắt đầu không hợp lệ'),
+  endTime: yup
+    .string()
+    .required('Giờ kết thúc là bắt buộc')
+    .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Giờ kết thúc không hợp lệ')
+    .test('is-after-startTime', 'Giờ kết thúc phải sau giờ bắt đầu', function (value) {
+      const { startTime } = this.parent
+      if (!startTime || !value) return true
+      return value > startTime
+    }),
   startDate: yup.date().required(),
-  endDate: yup.date().required().min(yup.ref('startDate'), 'endDate must be after startDate'),
+  endDate: yup
+    .date()
+    .required()
+    .min(yup.ref('startDate'), 'endDate phải lớn hơn hoặc bằng startDate'),
   location: yup.string().default('Chùa Diệu Pháp'),
   capacity: yup.number().default(100),
 })
@@ -33,7 +49,7 @@ export const create = async (req, res, next) => {
       ...body,
       slug,
       createdBy: userId,
-      ...(req.imageUrl && { imageUrl: req.imageUrl }),
+      ...(req.url && { imageUrl: req.url }),
       ...(req.publicId && { publicId: req.publicId }),
     })
 
