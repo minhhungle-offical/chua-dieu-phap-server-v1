@@ -1,6 +1,6 @@
 import * as yup from 'yup'
-import User from '../../../models/User'
-import { throwError } from '../../../utils/throwError'
+import User from '../../../models/User.js'
+import { throwError } from '../../../utils/throwError.js'
 
 const schema = yup.object({
   email: yup.string().email('Email không hợp lệ').required('Email không được bỏ trống'),

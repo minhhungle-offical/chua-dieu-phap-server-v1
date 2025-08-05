@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import authRouter from './modules/auth/route.js'
 import retreatRouter from './modules/retreats/route.js'
 import { corsOptions } from './utils/corsOption.js'
+import userRouter from './modules/users/route.js'
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }))
 // Routes
 app.use('/api/auth', authRouter)
 app.use('/api/retreats', retreatRouter)
+app.use('/api/users', userRouter)
 
 // 404 Handler
 app.use((req, res, next) => {
