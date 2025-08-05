@@ -4,11 +4,11 @@ import { throwError } from '../../../utils/throwError.js'
 
 export const remove = async (req, res, next) => {
   try {
-    const { slug } = req.params
+    const { id } = req.params
     const userId = req.user?._id
     const isAdmin = req.user?.role === 'owner'
 
-    const post = await Post.findOne({ slug })
+    const post = await Post.findOne({ _id: id })
     if (!post) throwError('Bài viết không tồn tại', 404)
 
     if (!isAdmin && String(post.createdBy) !== String(userId)) {

@@ -36,13 +36,11 @@ const schema = new mongoose.Schema(
       enum: POST_STATUSES,
       default: 'draft',
     },
-    tags: [
-      {
-        type: String,
-        trim: true,
-        lowercase: true,
-      },
-    ],
+    tags: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

@@ -8,7 +8,7 @@ const schema = yup.object({
   content: yup.string(),
   excerpt: yup.string().default(''),
   status: yup.string().oneOf(['draft', 'published', 'archived']),
-  tags: yup.array().of(yup.string().trim().lowercase()),
+  tags: yup.string().trim().lowercase(),
 })
 
 export const update = async (req, res, next) => {
@@ -16,10 +16,9 @@ export const update = async (req, res, next) => {
     const userId = req.user?._id
     if (!userId) throwError('Unauthorized', 401)
 
-    const { slug } = req.params
+    const { id } = req.params
 
-    const post = await Post.findOne({ slug })
-    if (!post) throwError('Bài viết không tồn tại', 404)
+    const post = await Post.findOne({ _id: id })
 
     if (String(post.createdBy) !== String(userId)) {
       throwError('Không có quyền chỉnh sửa bài viết này', 403)

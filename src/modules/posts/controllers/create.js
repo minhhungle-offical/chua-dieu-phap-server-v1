@@ -8,7 +8,7 @@ const schema = yup.object({
   content: yup.string().required('Nội dung không được để trống'),
   excerpt: yup.string().default(''),
   status: yup.string().oneOf(['draft', 'published', 'archived']).default('draft'),
-  tags: yup.array().of(yup.string().trim().lowercase()),
+  tags: yup.string().trim().lowercase(),
 })
 
 export const create = async (req, res, next) => {
