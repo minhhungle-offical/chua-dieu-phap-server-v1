@@ -28,7 +28,6 @@ export const resendOtp = async (req, res, next) => {
 
     const now = new Date()
 
-    // ❗ Ngăn gửi lại OTP quá sớm
     if (user.otpExpireAt && user.otpExpireAt > now) {
       const timeLeft = user.otpExpireAt.getTime() - now.getTime()
       if (timeLeft > OTP_RESEND_LIMIT_MS) {
