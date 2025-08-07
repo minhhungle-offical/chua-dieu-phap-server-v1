@@ -18,7 +18,8 @@ export const update = async (req, res, next) => {
 
     const { id } = req.params
 
-    const post = await Post.findOne({ _id: id })
+    const post = await Post.findById(id)
+    if (!post) throwError('Bài viết không tồn tại', 404)
 
     if (String(post.createdBy) !== String(userId)) {
       throwError('Không có quyền chỉnh sửa bài viết này', 403)
@@ -29,25 +30,31 @@ export const update = async (req, res, next) => {
       stripUnknown: true,
     })
 
+    const updateFields = {}
+
     if (body.title && body.title !== post.title) {
-      post.slug = await generateUniqueSlug(body.title, Post)
-      post.title = body.title
+      updateFields.title = body.title
+      updateFields.slug = await generateUniqueSlug(body.title, Post)
     }
 
-    if (body.content) post.content = body.content
-    if (body.excerpt !== undefined) post.excerpt = body.excerpt
-    if (body.status) post.status = body.status
-    if (body.tags) post.tags = body.tags
+    if ('content' in body) updateFields.content = body.content
+    if ('excerpt' in body) updateFields.excerpt = body.excerpt
+    if ('status' in body) updateFields.status = body.status
+    if ('tags' in body) updateFields.tags = body.tags
 
-    if (req.url) post.imageUrl = req.url
-    if (req.publicId) post.publicId = req.publicId
+    if (req.imageUrl) updateFields.imageUrl = req.imageUrl
+    if (req.publicId) updateFields.publicId = req.publicId
 
-    await post.save()
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: id },
+      { $set: updateFields },
+      { new: true },
+    )
 
     res.status(200).json({
       success: true,
-      message: 'Bài viết đã được cập nhật thành công',
-      data: post,
+      message: 'Cập nhật bài viết thành công',
+      data: updatedPost,
     })
   } catch (error) {
     if (error.name === 'ValidationError') {

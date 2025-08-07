@@ -35,8 +35,10 @@ export function createImageUploader({
     async (req, res, next) => {
       try {
         console.log('file', req.file)
-        console.log('body', req.body)
-        if (!req.file) return next()
+
+        if (!req.file) {
+          return next()
+        }
 
         const resizeOptions = square
           ? { width, height: width, fit: 'cover' }
@@ -70,7 +72,7 @@ export function createImageUploader({
 
         const { url, publicId } = await uploadToCloudinary()
 
-        req.url = url
+        req.imageUrl = url
         req.publicId = publicId
         next()
       } catch (err) {

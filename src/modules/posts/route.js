@@ -11,8 +11,8 @@ const postRouter = express.Router()
 
 postRouter.get('/', getAll)
 postRouter.post('/:slug', getBySlug)
-postRouter.post('/', checkAuth, ...createImageUploader({ folder: 'avatar' }), create)
-postRouter.put('/:id', checkAuth, ...createImageUploader({ folder: 'avatar' }), update)
+postRouter.post('/', checkAuth, ...createImageUploader({ folder: 'posts' }), create)
+postRouter.put('/:id', checkAuth, ...createImageUploader({ folder: 'posts' }), update)
 postRouter.delete('/:id', checkAuth, remove)
 
 export default postRouter

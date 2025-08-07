@@ -49,7 +49,7 @@ export const create = async (req, res, next) => {
       ...body,
       slug,
       createdBy: userId,
-      ...(req.url && { imageUrl: req.url }),
+      ...(req.imageUrl && { imageUrl: req.imageUrl }),
       ...(req.publicId && { publicId: req.publicId }),
     })
 

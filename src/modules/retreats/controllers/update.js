@@ -36,12 +36,12 @@ export const update = async (req, res, next) => {
       body.slug = await generateUniqueSlug(body.name, Retreat, retreat._id)
     }
 
-    if (req.url && req.publicId) {
+    if (req.imageUrl && req.publicId) {
       if (retreat.publicId) {
         await deleteImage(retreat.publicId)
       }
 
-      body.imageUrl = req.url
+      body.imageUrl = req.imageUrl
       body.publicId = req.publicId
     }
 
