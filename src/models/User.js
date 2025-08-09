@@ -3,6 +3,7 @@ import { Schema, model } from 'mongoose'
 export const MARITAL_STATUSES = ['single', 'married', 'widowed', 'divorced', 'other']
 export const GENDER = ['male', 'female', 'other']
 export const ROLE = ['owner', 'admin', 'member']
+export const STATUS_OPTIONS = ['active', 'inactive', 'banned']
 
 const schema = new Schema(
   {
@@ -15,6 +16,8 @@ const schema = new Schema(
 
     avatarUrl: { type: String },
     publicId: { type: String },
+    status: { type: String, enum: STATUS_OPTIONS, default: 'active' },
+    isVerified: { type: Boolean, default: false },
 
     otpHash: { type: String },
     otpExpireAt: { type: Date },

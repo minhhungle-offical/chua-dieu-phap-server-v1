@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 import mongoose from 'mongoose'
-import User from '../../../models/User.js'
+import User, { STATUS_OPTIONS } from '../../../models/User.js'
 import { throwError } from '../../../utils/throwError.js'
 
 const schema = yup.object({
@@ -13,6 +13,7 @@ const schema = yup.object({
   dateOfBirth: yup.date().typeError('Ngày sinh không hợp lệ'),
   address: yup.string().trim(),
   occupation: yup.string().trim(),
+  isActive: yup.string().oneOf(STATUS_OPTIONS, 'Trạng thái không hợp lệ'),
   maritalStatus: yup
     .string()
     .oneOf(

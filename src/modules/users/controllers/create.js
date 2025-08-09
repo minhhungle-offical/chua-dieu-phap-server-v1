@@ -36,6 +36,8 @@ export const create = async (req, res, next) => {
 
     const newUser = new User({
       email,
+      status: 'active',
+      isVerified: false,
       ...rest,
       ...(req.url && { avatarUrl: req.url }),
       ...(req.publicId && { publicId: req.publicId }),
